@@ -84,13 +84,16 @@ public class Janela extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblArquivo))
-                    .addComponent(btnCalcular)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblArquivo))
+                            .addComponent(btnCalcular))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,12 +113,33 @@ public class Janela extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
-       
-            DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
-            modelo.addRow(new Object[]{"12345678", 5,6,7,6});
+
+                  
+            try {
+            JFileChooser jfc = new JFileChooser();
+            jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            jfc.showOpenDialog(this);
+            lblArquivo.setText(Paths.get(jfc.getSelectedFile().toString()).toString());
             
-            
-            
+            Scanner entrada = new Scanner(Paths.get(lblArquivo.getText()));
+
+            while(entrada.hasNext())
+            {
+                String matricula = entrada.next();
+                float nota1 = entrada.nextFloat();
+                float nota2 = entrada.nextFloat();
+                float nota3 = entrada.nextFloat();
+                
+                DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+                modelo.addRow(new Object[]{matricula, nota1,nota2,nota3,(nota1 + nota2 + nota3) / 3}); 
+            }
+
+            entrada.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Janela.class.getName()).log(Level.SEVERE, null, ex);
+            lblArquivo.setText("");
+
+        }
     }//GEN-LAST:event_btnCalcularActionPerformed
 
     /**
